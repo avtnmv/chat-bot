@@ -48,12 +48,24 @@ bot.on('message', (msg) => {
 
     case 3:
       user.name = text;
+      user.step++;
+      bot.sendMessage(chatId, '5. Ваш Telegram (обязательно начинается с @)');
+      break;
+
+    case 4:
+      if (!/^@[A-Za-z0-9_]{5,32}$/.test(text)) {
+        bot.sendMessage(chatId, '❗ Telegram-ник должен начинаться с @ и содержать только буквы, цифры и _. Минимум 5 символов после @.');
+        return;
+      }
+
+      user.telegram = text;
 
       const message = `📩 Новая заявка:
 🔹 Имя: ${user.name}
 🔹 Язык: ${user.language}
 🔹 Город: ${user.city}
-🔹 Телефон: ${user.phone}`;
+🔹 Телефон: ${user.phone}
+🔹 Telegram: ${user.telegram}`;
 
       bot.sendMessage(groupChatId, message);
       bot.sendMessage(chatId, '✅ Спасибо! Ваша заявка отправлена.');
@@ -67,3 +79,4 @@ bot.on('message', (msg) => {
       break;
   }
 });
+
