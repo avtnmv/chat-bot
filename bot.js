@@ -8,11 +8,24 @@ const bot = new TelegramBot(token, { polling: true });
 
 const users = {};
 
+// Обработка команды /start
+bot.onText(/\/start/, (msg) => {
+  const chatId = msg.chat.id;
+  
+  // Сбрасываем состояние пользователя и начинаем заново
+  users[chatId] = { step: 0 };
+  
+  bot.sendMessage(chatId, '👋 Добро пожаловать! Давайте заполним заявку.\n\n1. Какой язык вы знаете?');
+});
+
 bot.on('message', (msg) => {
   const chatId = msg.chat.id;
   const text = msg.text?.trim();
 
   if (!text) return;
+
+  // Игнорируем команды (начинающиеся с /)
+  if (text.startsWith('/')) return;
 
   if (!users[chatId]) {
     users[chatId] = { step: 0 };
